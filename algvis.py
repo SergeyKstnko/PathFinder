@@ -1,15 +1,21 @@
+'''
+This code is the backened that implements Dijkstra Algorithm
+
+'''
+
 class Square:
 
     def __init__(self,r,c):
+        #row and column coorodinates of a current square
         self.r = r
         self.c = c
         #0 for not visited, 1 for visited
         self.visited = 0
         #shortest distance from Start Node
-        #if you start from this node than distance is 0, previous vertex is nothing
+        #if you start from this node then distance is 0, previous vertex is nothing
         #-1 is infinity
         self.shortest_dist = -1
-        #Previous node, where V is vertex
+        #Row and Column coordinates of a previous node
         self.prev_r = r
         self.prev_c = c
         #weight of this node
@@ -40,7 +46,7 @@ def pick_shortest(not_visited):
 def add_to_notvisited(board, curr_node, not_visited):
     """
     This function adds new neighbours to not_visited list
-    :args:      
+    :args:
     :return:
     """
     r = curr_node.r
@@ -68,6 +74,7 @@ def dijkstra(board, beg_node, end_node):
     :return:    
     """
     not_visited = []
+    #visited is implemented with 1 or 0 inside Square class
     beg_node.shortest_dist = 0
     curr_node = beg_node
 
@@ -87,7 +94,6 @@ def dijkstra(board, beg_node, end_node):
             #if new shortest distance smaller than the current one then update it
             #update previous vertex for each neighbour
         if r-1 >= 0 and r-1 < len(board):
-            #print("Here")
             if board[r-1][c] not in not_visited and board[r-1][c].visited == 0:
                 not_visited.append(board[r-1][c])
 
@@ -139,7 +145,7 @@ def dijkstra(board, beg_node, end_node):
         #found = True
     
 
-n = 100
+n = 10
 
 board = [[Square(r,c) for c in range(n)] for r in range(n)]
 

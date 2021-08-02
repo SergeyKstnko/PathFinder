@@ -1,12 +1,12 @@
 import pygame
 import sys
-#import backend as be
 
+from pygame.constants import K_1
+import backend as be
+
+clock = pygame.time.Clock()
 WINDOW_WIDTH = 990
-WINDOW_HEIGHT = 900
-#dimensions of the board
-n_x = 66
-n_y = 10
+WINDOW_HEIGHT = 755
 
 
 # Version we recommend you use
@@ -23,10 +23,29 @@ pygame.display.set_caption("My Algorithm Visualizer")
 
 game_running = True
 
+#y
+r = 45
+#x
+c = 66
+#With of a small square
+p = 15
+
+
+#j is a column and k is a row
+board = [[be.Square(j,k) for k in range(c)] for j in range(r)]
+
+#What is the square to start?
+#What is the square to end?
+start_node = board[25][25]
+target_node = board[42][42]
+
+
+#clabe.dijkstra(board, start_node, target_node)
+print(target_node.shortest_dist)
+
 
 while game_running:
     #Game content
-    print("Hello")
     #Color of window background
     game_window.fill((255,255,255))
     # Loop through all active events
@@ -34,6 +53,9 @@ while game_running:
         # Close the program if the user presses the 'X'
         if event.type == pygame.QUIT:
             game_running = False
+        elif event.type == pygame.KEYDOWN:
+            if event.key == K_1:
+                be.dijkstra(board, start_node, target_node, game_window)
 
     #height where line begins
     y_line = 75
@@ -43,16 +65,17 @@ while game_running:
     #sm_rect = pygame.Rect(50, 100, 10, 10)
     #pygame.draw.rect(game_window, "blue", sm_rect, 1)
 
-    p = 15
-    for y in range(0,45):
-        for x in range(0,n_x-1):
-            sm_rect = pygame.Rect(p*x,y_line+p*y, p, p)
-            pygame.draw.rect(game_window, "blue", sm_rect, width=1)
-    
-    #sm_rect = pygame.Rect(p*1,p*1, p, p)
-    #pygame.draw.rect(game_window, "blue", sm_rect, width=1)
+    for y in range(0,r):
+        for x in range(0,c):
+            sm_rect = pygame.Rect(p*x, y_line+p*y, p, p)
+            pygame.draw.rect(game_window, board[y][x].color, sm_rect, board[y][x].width)
+            if board[y][x].visited == 1:
+                pygame.draw.rect(game_window, "black", sm_rect, width = 1)
 
-    pygame.display.update()
+    clock.tick(14)
+    #pygame.display.update()
+    pygame.display.flip()
+    
 
 pygame.quit()
 sys.exit()

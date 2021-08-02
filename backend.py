@@ -3,6 +3,17 @@ This code is the backened that implements Dijkstra Algorithm
 
 '''
 
+import pygame
+clock = pygame.time.Clock()
+WINDOW_WIDTH = 990
+WINDOW_HEIGHT = 800
+#y
+r = 45
+#x
+c = 66
+#With of a small square
+p = 15
+
 class Square:
 
     def __init__(self,r,c):
@@ -20,10 +31,13 @@ class Square:
         self.prev_c = c
         #weight of this node
         self.weight = 1
+
+        ##GUI attributes
+        self.color = "black"
+        self.width = 1
     
     def get_coord(self):
         return (self.r,self.c)
-
 
 
 def pick_shortest(not_visited):
@@ -66,13 +80,39 @@ def add_to_notvisited(board, curr_node, not_visited):
             not_visited.append(board[r][c+1])
 
 
+def update_screen(board, game_window):
+    
+    #Game content
+    #Color of window background
+    game_window.fill((255,255,255))
 
-def dijkstra(board, beg_node, end_node):
+    #height where line begins
+    y_line = 75
+    pygame.draw.line(game_window, (0,0,0,0), (0,y_line), (WINDOW_WIDTH,y_line), width=3)
+
+    for y in range(0,r):
+        for x in range(0,c):
+            #(pos_left, pos_right, width, height)
+            sm_rect = pygame.Rect(p*x, y_line+p*y, p, p)
+            pygame.draw.rect(game_window, board[y][x].color, sm_rect, board[y][x].width)
+            if board[y][x].visited == 1:
+                pygame.draw.rect(game_window, "black", sm_rect, width = 1)
+
+    clock.tick(200)
+    #pygame.display.update()
+    pygame.display.flip()
+
+
+
+def dijkstra(board, beg_node, end_node, game_window):
     """
     This function implements Dijkstra algorithm
     :args:      
     :return:    
     """
+    beg_node.width = 0
+    end_node.width = 0
+
     not_visited = []
     #visited is implemented with 1 or 0 inside Square class
     beg_node.shortest_dist = 0
@@ -132,6 +172,9 @@ def dijkstra(board, beg_node, end_node):
         
         #mark current node as visited
         curr_node.visited = 1
+        if curr_node is not beg_node and curr_node is not end_node:
+            curr_node.color = "blue"
+            curr_node.width = 0
         #pick node from unvisited list with shortes distance
         if len(not_visited):
             curr_node = pick_shortest(not_visited)
@@ -143,20 +186,10 @@ def dijkstra(board, beg_node, end_node):
             found = True
 
         #found = True
+
+        update_screen(board, game_window)
     
 
-n = 10
-
-board = [[Square(r,c) for c in range(n)] for r in range(n)]
-
-#What is the square to start?
-#What is the square to end?
-start_node = board[0][0]
-target_node = board[99][99]
-
-
-dijkstra(board,start_node, target_node)
-print(target_node.shortest_dist)
 
 '''
 #testing pick shortest

@@ -4,6 +4,7 @@ This code is the backened that implements Dijkstra Algorithm
 '''
 
 import pygame
+from pygame.display import update
 clock = pygame.time.Clock()
 WINDOW_WIDTH = 990
 WINDOW_HEIGHT = 800
@@ -27,8 +28,9 @@ class Square:
         #-1 is infinity
         self.shortest_dist = -1
         #Row and Column coordinates of a previous node
-        self.prev_r = r
-        self.prev_c = c
+        self.prev_node = None
+        self.prev_r = -1
+        self.prev_c = -1
         #weight of this node
         self.weight = 1
 
@@ -98,10 +100,25 @@ def update_screen(board, game_window):
             if board[y][x].visited == 1:
                 pygame.draw.rect(game_window, "black", sm_rect, width = 1)
 
-    clock.tick(200)
+    clock.tick(300)
     #pygame.display.update()
     pygame.display.flip()
 
+def color_shortest_path(curr_node, beg_node,board, game_window):
+    """
+    This functions goes back from the end_node and changes color for the
+    shortest path to yellow
+    This function will be recursive
+    """
+    #base case
+    if curr_node is beg_node:
+        return   
+    curr_node.color = "yellow"
+    update_screen(board, game_window)
+    color_shortest_path(curr_node.prev_node, beg_node, board, game_window)
+
+def wrap(curr_node, beg_node, board, game_window):
+    color_shortest_path(curr_node.prev_node, beg_node, board, game_window)
 
 
 def dijkstra(board, beg_node, end_node, game_window):
@@ -140,8 +157,9 @@ def dijkstra(board, beg_node, end_node, game_window):
                 new = curr_node.shortest_dist + board[r-1][c].weight
                 if new < board[r-1][c].shortest_dist or board[r-1][c].shortest_dist < 0:
                     board[r-1][c].shortest_dist = new
-                    board[r-1][c].prev_r = curr_node.r
-                    board[r-1][c].prev_c = curr_node.c
+                    board[r-1][c].prev_node = curr_node
+                    #board[r-1][c].prev_r = curr_node.r
+                    #board[r-1][c].prev_c = curr_node.c
         if r+1 >=0 and r+1 < len(board):
             if board[r+1][c] not in not_visited and board[r+1][c].visited == 0:
                 not_visited.append(board[r+1][c])
@@ -149,8 +167,9 @@ def dijkstra(board, beg_node, end_node, game_window):
                 new = curr_node.shortest_dist + board[r+1][c].weight
                 if new < board[r+1][c].shortest_dist or board[r+1][c].shortest_dist < 0:
                     board[r+1][c].shortest_dist = new
-                    board[r+1][c].prev_r = curr_node.r
-                    board[r+1][c].prev_c = curr_node.c
+                    board[r+1][c].prev_node = curr_node
+                    #board[r+1][c].prev_r = curr_node.r
+                    #board[r+1][c].prev_c = curr_node.c
         if c-1 >=0 and c-1 < len(board[0]):
             if board[r][c-1] not in not_visited and board[r][c-1].visited == 0:
                 not_visited.append(board[r][c-1])
@@ -158,8 +177,9 @@ def dijkstra(board, beg_node, end_node, game_window):
                 new = curr_node.shortest_dist + board[r][c-1].weight
                 if new < board[r][c-1].shortest_dist or board[r][c-1].shortest_dist < 0:
                     board[r][c-1].shortest_dist = new
-                    board[r][c-1].prev_r = curr_node.r
-                    board[r][c-1].prev_c = curr_node.c
+                    board[r][c-1].prev_node = curr_node
+                    #board[r][c-1].prev_r = curr_node.r
+                    #board[r][c-1].prev_c = curr_node.c
         if c+1 >= 0 and c+1 < len(board[0]):
             if board[r][c+1] not in not_visited and board[r][c+1].visited == 0:
                 not_visited.append(board[r][c+1])
@@ -167,8 +187,9 @@ def dijkstra(board, beg_node, end_node, game_window):
                 new = curr_node.shortest_dist + board[r][c+1].weight
                 if new < board[r][c+1].shortest_dist or board[r][c+1].shortest_dist < 0:
                     board[r][c+1].shortest_dist = new
-                    board[r][c+1].prev_r = curr_node.r
-                    board[r][c+1].prev_c = curr_node.c
+                    board[r][c+1].prev_node = curr_node
+                    #board[r][c+1].prev_r = curr_node.r
+                    #board[r][c+1].prev_c = curr_node.c
         
         #mark current node as visited
         curr_node.visited = 1
@@ -188,6 +209,8 @@ def dijkstra(board, beg_node, end_node, game_window):
         #found = True
 
         update_screen(board, game_window)
+    wrap(end_node, beg_node, board, game_window)
+    
     
 
 

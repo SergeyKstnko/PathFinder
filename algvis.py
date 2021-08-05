@@ -37,11 +37,7 @@ board = [[be.Square(j,k) for k in range(c)] for j in range(r)]
 #What is the square to start?
 #What is the square to end?
 start_node = board[25][25]
-target_node = board[42][42]
-
-
-#clabe.dijkstra(board, start_node, target_node)
-print(target_node.shortest_dist)
+target_node = board[10][20]
 
 
 while game_running:

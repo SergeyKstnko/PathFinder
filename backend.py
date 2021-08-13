@@ -6,16 +6,27 @@ This code is the backened that implements Dijkstra Algorithm
 import pygame
 from pygame.display import update
 clock = pygame.time.Clock()
-WINDOW_WIDTH = 990
-WINDOW_HEIGHT = 800
-#y
-r = 45
-#x
-c = 66
-#With of a small square
-p = 15
+
 
 class Square:
+    #BOARD CONSTANTS
+    WINDOW_WIDTH = 990
+    WINDOW_HEIGHT = 760
+    #How many columns will the board have
+    c = 66
+    #How many rows will the board have
+    r = 45
+    #Width of a small square
+    p = 15
+    #height where horizontal line begins. The one that separates upper white
+    #space and the board
+    y_line = 75
+
+    #BOARD VARIABLES
+    prompt = "Choose starting point"
+    start_node = None
+    target_node = None
+    switch = 0
 
     def __init__(self,r,c):
         #row and column coorodinates of a current square
@@ -88,14 +99,12 @@ def update_screen(board, game_window):
     #Color of window background
     game_window.fill((255,255,255))
 
-    #height where line begins
-    y_line = 75
-    pygame.draw.line(game_window, (0,0,0,0), (0,y_line), (WINDOW_WIDTH,y_line), width=3)
+    pygame.draw.line(game_window, (0,0,0,0), (0,Square.y_line), (Square.WINDOW_WIDTH,Square.y_line), width=3)
 
-    for y in range(0,r):
-        for x in range(0,c):
+    for y in range(0,Square.r):
+        for x in range(0,Square.c):
             #(pos_left, pos_right, width, height)
-            sm_rect = pygame.Rect(p*x, y_line+p*y, p, p)
+            sm_rect = pygame.Rect(Square.p*x, Square.y_line+Square.p*y, Square.p, Square.p)
             pygame.draw.rect(game_window, board[y][x].color, sm_rect, board[y][x].width)
             if board[y][x].visited == 1:
                 pygame.draw.rect(game_window, "black", sm_rect, width = 1)
@@ -212,30 +221,3 @@ def dijkstra(board, beg_node, end_node, game_window):
     wrap(end_node, beg_node, board, game_window)
     
     
-
-
-'''
-#testing pick shortest
-#nodes around (2,20)
-board[1][20].shortest_dist = 2
-board[2][19].shortest_dist = 20
-board[3][20].shortest_dist = 10
-board[2][21].shortest_dist = 9
-not_visited = [board[1][20],board[2][19],board[3][20],board[2][21]]
-print(pick_shortest(not_visited).get_coord(), "\n")
-for i in not_visited:
-    print(i.get_coord())
-'''
-
-
-
-'''
-#testing add_to_unvisited
-#not_visited = []
-curr = board[90][0]
-
-add_to_unvisited(board, curr, not_visited)
-for el in not_visited:
-    print(el.get_coord())
-
-'''

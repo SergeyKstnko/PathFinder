@@ -30,15 +30,12 @@ class Dijkstra:
         self.curr_node = self.beg_node
 
 
-
-
     def pick_shortest(self, not_visited):
             """
             Function picks unvisited node with shortest distance
             :args:      
             "return:    node from the list with the shortest path to the start node
             """
-            #print(not_visited[0].get_coord())
             shortest = not_visited[0]
             ind = 0
             for i in range(1,len(not_visited)):
@@ -48,8 +45,6 @@ class Dijkstra:
             #remove and return shortest from not_visited
             return not_visited.pop(ind)
 
-    def add_to_notvisited(self, board, curr_node, not_visited):
-        pass
     
     def is_shortest_path_colored(self):
         return self.curr_node is self.beg_node
@@ -60,20 +55,9 @@ class Dijkstra:
         shortest path to yellow
         This function will be recursive
         """
-        #base case
-        #if curr_node is beg_node:
-        #    return
-        #print("%d, %d" % curr_node.r, print(curr_node.c))
         self.curr_node.color = "yellow"
-        #update_screen(board)
         self.curr_node = self.curr_node.prev_node
-        #color_shortest_path(curr_node.prev_node, beg_node, board, game_window)
 
-    def wrap(self, curr_node, beg_node, board, game_window):
-        self.color_shortest_path(curr_node.prev_node, beg_node, board, game_window)
-
-    def get_board(self):
-        return self.board
 
     #if end node is solved then return 1
     def is_solved(self):
@@ -81,7 +65,6 @@ class Dijkstra:
 
 
     def make_one_step(self):
-       
         r = self.curr_node.r
         c = self.curr_node.c
         board = self.board
@@ -132,7 +115,7 @@ class Dijkstra:
                 if new < board[r][c+1].shortest_dist or board[r][c+1].shortest_dist < 0:
                     board[r][c+1].shortest_dist = new
                     board[r][c+1].prev_node = curr_node
-
+                    
         
         #mark current node as visited
         curr_node.visited = 1
@@ -144,7 +127,7 @@ class Dijkstra:
             curr_node = self.pick_shortest(not_visited)
 
         if self.is_solved():
-            curr_node == self.end_node.prev_node
+            curr_node = self.end_node.prev_node
 
         self.curr_node.r = r
         self.curr_node.c = c

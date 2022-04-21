@@ -210,7 +210,7 @@ def dijkstra(board, beg_node, end_node, game_window):
         if curr_node is not beg_node and curr_node is not end_node:
             curr_node.color = "blue"
             curr_node.width = 0
-        #pick node from unvisited list with shortest distance
+        #pick node from unvisited list with shortes distance
         if len(not_visited):
             curr_node = pick_shortest(not_visited)
 
@@ -223,7 +223,6 @@ def dijkstra(board, beg_node, end_node, game_window):
         #found = True
 
         update_screen(board, game_window)
-        
     wrap(end_node, beg_node, board, game_window)
 
     profile.disable()

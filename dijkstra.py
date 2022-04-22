@@ -45,19 +45,6 @@ class Dijkstra:
             #remove and return shortest from not_visited
             return not_visited.pop(ind)
 
-    
-    def is_shortest_path_colored(self):
-        return self.curr_node is self.beg_node
-    
-    def color_path_one_step(self):
-        """
-        This functions goes back from the end_node and changes color for the
-        shortest path to yellow
-        This function will be recursive
-        """
-        self.curr_node.color = "yellow"
-        self.curr_node = self.curr_node.prev_node
-
 
     #if end node is solved then return 1
     def is_solved(self):

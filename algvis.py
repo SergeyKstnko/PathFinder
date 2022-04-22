@@ -2,9 +2,10 @@
 import sys
 from pygame.constants import K_1, K_SPACE
 import pygame
-import backend as be
 from square import Square
 from dijkstra import Dijkstra
+from bfs import BFS
+
 
 
 
@@ -23,18 +24,9 @@ game_running = True
 #j is a column and k is a row
 board = [[Square(j,k) for k in range(Square.c)] for j in range(Square.r)]
 
-board[10][10].weight = 10
-board[11][10].weight = 10
-board[12][10].weight = 10
-board[13][10].weight = 10
-board[14][10].weight = 10
-board[15][10].weight = 10
-board[16][10].weight = 10
-
 
 
 def update_screen():    
- 
     for y in range(0,Square.r):
         for x in range(0,Square.c):
             #(pos_left, pos_right, width, height)
@@ -44,6 +36,19 @@ def update_screen():
                 pygame.draw.rect(game_window, "black", sm_rect, width = 1)
 
     pygame.display.flip()
+   
+
+def is_shortest_path_colored(alg):
+    return alg.curr_node is alg.beg_node
+
+def color_path_one_step(alg):
+    """
+    This functions goes back from the end_node and changes color for the
+    shortest path to yellow
+    This function will be recursive
+    """
+    alg.curr_node.color = "yellow"
+    alg.curr_node = alg.curr_node.prev_node
 
 
 while game_running:
@@ -71,21 +76,23 @@ while game_running:
                 Square.target_node.width = 0
                 Square.switch = 3 
                 Square.prompt = "Press SPACE bar to start Dijkstra Algorithm"
-        elif Square.switch == 3 and event.type == pygame.KEYDOWN:
-            if event.key == K_SPACE:
-
+        elif event.type == pygame.KEYDOWN and event.key == K_SPACE:
+            if Square.switch == 4:
                 alg = Dijkstra(board)
-                #while solution is not found
-                while not alg.is_solved():
-                    #move one step further
-                    alg.make_one_step()
-                    update_screen()
-                    clock.tick(40)
-                
-                while not alg.is_shortest_path_colored():
-                    alg.color_path_one_step()
-                    update_screen()
-                    clock.tick(40)
+            elif Square.switch == 3:
+                alg = BFS(board)
+
+            #while solution is not found
+            while not alg.is_solved():
+                #move one step further
+                alg.make_one_step()
+                update_screen()
+                clock.tick(40)
+            
+            while not is_shortest_path_colored(alg):
+                color_path_one_step(alg)
+                update_screen()
+                clock.tick(40)
     
 
     pygame.draw.line(game_window, (0,0,0,0), (0,Square.y_line), (Square.WINDOW_WIDTH,Square.y_line), width=3)

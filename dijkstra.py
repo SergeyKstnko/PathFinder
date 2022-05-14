@@ -18,7 +18,6 @@ class Dijkstra:
     def __init__(self, board):
         
         self.board = board
-
         self.beg_node = Square.start_node
         self.end_node = Square.target_node
         self.beg_node.width = 0

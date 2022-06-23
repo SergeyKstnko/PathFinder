@@ -74,7 +74,7 @@ while game_running:
             elif Square.switch == 1:
                 Square.target_node = board[ypos][xpos]
                 Square.target_node.width = 0
-                Square.switch = 3 
+                Square.switch = 4 
                 Square.prompt = "Press SPACE bar to start Dijkstra Algorithm"
         elif event.type == pygame.KEYDOWN and event.key == K_SPACE:
             if Square.switch == 4:
